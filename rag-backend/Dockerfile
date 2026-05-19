@@ -1,29 +1,29 @@
-FROM node:20-alpine AS builder
+FROM node:20-alpine
 
 WORKDIR /app
 
+# Install dependencies (includes dev deps needed for prisma generate + build)
 COPY package*.json ./
 RUN npm ci
 
+# Copy source and build
 COPY . .
 RUN npx prisma generate
 RUN npm run build
 
-FROM node:20-alpine AS runner
+# Pre-download the embedding model so first request doesn't stall
+RUN node -e " \
+  const { pipeline } = require('@xenova/transformers'); \
+  pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2') \
+    .then(() => { console.log('Model cached'); process.exit(0); }) \
+    .catch(e => { console.error(e); process.exit(1); }); \
+"
 
-WORKDIR /app
+# Prune dev dependencies after build
+RUN npm prune --omit=dev
 
-RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nestjs
-
-COPY package*.json ./
-RUN npm ci --omit=dev
-
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
-COPY prisma ./prisma
-
-USER nestjs
+# Temp upload dir for multer
+RUN mkdir -p uploads
 
 EXPOSE 3001
 
