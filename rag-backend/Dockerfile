@@ -8,7 +8,7 @@ RUN npm ci
 
 # Copy source and build
 COPY . .
-RUN npx prisma generate
+RUN ./node_modules/.bin/prisma generate
 RUN npm run build
 
 # Pre-download the embedding model so first request doesn't stall
