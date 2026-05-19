@@ -23,7 +23,9 @@ export class PerformanceInterceptor implements NestInterceptor {
     return next.handle().pipe(
       tap(() => {
         const duration = Date.now() - start;
-        res.setHeader('X-Response-Time', `${duration}ms`);
+        if (!res.headersSent) {
+          res.setHeader('X-Response-Time', `${duration}ms`);
+        }
         if (duration > SLOW_THRESHOLD_MS) {
           this.logger.warn(
             `Slow response: ${req.method} ${req.url} took ${duration}ms`,
