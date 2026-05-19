@@ -70,9 +70,9 @@ describe('RagService', () => {
     expect(mockPrisma.chatMessage.create).toHaveBeenCalledTimes(2);
   });
 
-  it('filters chunks below score threshold (0.3)', async () => {
+  it('filters chunks below noise threshold (0.05)', async () => {
     (mockVectorDb.searchSimilar as jest.Mock).mockResolvedValue([
-      { id: '1', score: 0.1, content: 'low', documentName: 'doc.pdf', documentId: 'doc1', chunkIndex: 0 },
+      { id: '1', score: 0.02, content: 'noise', documentName: 'doc.pdf', documentId: 'doc1', chunkIndex: 0 },
     ]);
     const result = await service.answerQuestion('Q?', 'session1', 'user1');
     expect(result.answer).toContain('could not find relevant information');

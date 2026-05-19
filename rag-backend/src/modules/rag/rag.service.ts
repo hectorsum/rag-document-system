@@ -7,7 +7,9 @@ import { VectorDbService } from './vector-db.service';
 import { CostTrackingService } from '../analytics/cost-tracking.service';
 import type { Source } from '../../common/types';
 
-const SCORE_THRESHOLD = 0.3;
+// Only reject results that are essentially noise (cosine similarity near zero).
+// The LLM's system prompt handles the case where context isn't directly relevant.
+const SCORE_THRESHOLD = 0.05;
 const NO_CONTEXT_REPLY = "I could not find relevant information in your documents.";
 const NO_DOCS_REPLY = "You don't have any processed documents yet. Please upload a PDF and wait for it to finish processing.";
 
