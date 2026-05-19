@@ -57,13 +57,20 @@ export class VectorDbService implements OnModuleInit {
   async searchSimilar(
     queryVector: number[],
     topK = 5,
-    filter?: { documentId: string },
+    filter?: { documentId?: string; documentIds?: string[] },
   ): Promise<SimilarChunk[]> {
+    let pineconeFilter: object | undefined;
+    if (filter?.documentId) {
+      pineconeFilter = { documentId: { $eq: filter.documentId } };
+    } else if (filter?.documentIds && filter.documentIds.length > 0) {
+      pineconeFilter = { documentId: { $in: filter.documentIds } };
+    }
+
     const result = await this.index.query({
       vector: queryVector,
       topK,
       includeMetadata: true,
-      ...(filter ? { filter: { documentId: { $eq: filter.documentId } } } : {}),
+      ...(pineconeFilter ? { filter: pineconeFilter } : {}),
     });
 
     return (result.matches ?? [])

@@ -5,7 +5,10 @@ import type { LlmService } from './llm.service';
 import type { VectorDbService } from './vector-db.service';
 import type { CostTrackingService } from '../analytics/cost-tracking.service';
 
+const MOCK_USER_DOCS = [{ id: 'doc1' }];
+
 const mockPrisma = {
+  document: { findMany: jest.fn().mockResolvedValue(MOCK_USER_DOCS) },
   chatMessage: { create: jest.fn().mockResolvedValue({}) },
   chatSession: { update: jest.fn().mockResolvedValue({}) },
 } as unknown as PrismaService;
@@ -33,6 +36,13 @@ describe('RagService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     service = new RagService(mockPrisma, mockEmbedding, mockLlm, mockVectorDb, mockCostTracking);
+  });
+
+  it('returns no-docs message when user has no ready documents', async () => {
+    (mockPrisma.document.findMany as jest.Mock).mockResolvedValueOnce([]);
+    const result = await service.answerQuestion('Q?', 'session1', 'user1');
+    expect(result.answer).toContain("don't have any processed documents");
+    expect(mockVectorDb.searchSimilar).not.toHaveBeenCalled();
   });
 
   it('returns fallback message when no relevant chunks found', async () => {

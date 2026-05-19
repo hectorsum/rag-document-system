@@ -8,8 +8,8 @@ import { CostTrackingService } from '../analytics/cost-tracking.service';
 import type { Source } from '../../common/types';
 
 const SCORE_THRESHOLD = 0.3;
-const NO_CONTEXT_REPLY =
-  "I could not find relevant information in your documents.";
+const NO_CONTEXT_REPLY = "I could not find relevant information in your documents.";
+const NO_DOCS_REPLY = "You don't have any processed documents yet. Please upload a PDF and wait for it to finish processing.";
 
 @Injectable()
 export class RagService {
@@ -29,14 +29,11 @@ export class RagService {
     userId: string,
     onChunk?: (chunk: string) => void,
   ): Promise<{ answer: string; sources: Source[] }> {
-    const queryVector = await this.embeddingService.embed(question);
-    const matches = await this.vectorDbService.searchSimilar(queryVector, 5);
-    this.logger.log(
-      `Pinecone returned ${matches.length} matches: ${
-        matches.map(m => `${m.documentName}(${m.score.toFixed(3)})`).join(', ') || 'none'
-      }`,
-    );
-    const relevant = matches.filter(m => m.score > SCORE_THRESHOLD);
+    // Only search within the user's own ready documents
+    const userDocs = await this.prisma.document.findMany({
+      where: { userId, status: 'ready' },
+      select: { id: true },
+    });
 
     const saveMessages = async (answer: string, sources: Source[]) => {
       await this.prisma.chatMessage.create({
@@ -55,6 +52,21 @@ export class RagService {
         data: { updatedAt: new Date() },
       });
     };
+
+    if (userDocs.length === 0) {
+      await saveMessages(NO_DOCS_REPLY, []);
+      return { answer: NO_DOCS_REPLY, sources: [] };
+    }
+
+    const queryVector = await this.embeddingService.embed(question);
+    const documentIds = userDocs.map(d => d.id);
+    const matches = await this.vectorDbService.searchSimilar(queryVector, 5, { documentIds });
+    this.logger.log(
+      `Pinecone returned ${matches.length} matches for user ${userId}: ${
+        matches.map(m => `${m.documentName}(${m.score.toFixed(3)})`).join(', ') || 'none'
+      }`,
+    );
+    const relevant = matches.filter(m => m.score > SCORE_THRESHOLD);
 
     if (relevant.length === 0) {
       await saveMessages(NO_CONTEXT_REPLY, []);
