@@ -32,6 +32,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
       exception instanceof Error ? exception.stack : String(exception),
     );
 
+    // SSE endpoints flush headers before streaming — can't send JSON after that.
+    if (res.headersSent) {
+      this.logger.warn(`${req.method} ${req.url}: exception after headers sent, skipping JSON response`);
+      return;
+    }
+
     res.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),

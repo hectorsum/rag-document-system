@@ -64,16 +64,28 @@ export class ChatService {
         question,
         sessionId,
         userId,
-        chunk => res.write(`data: ${JSON.stringify({ type: 'chunk', text: chunk })}\n\n`),
+        chunk => {
+          if (!res.writableEnded) {
+            res.write(`data: ${JSON.stringify({ type: 'chunk', text: chunk })}\n\n`);
+          }
+        },
       );
 
-      res.write(`data: ${JSON.stringify({ type: 'done', sources })}\n\n`);
+      if (!res.writableEnded) {
+        res.write(`data: ${JSON.stringify({ type: 'done', sources })}\n\n`);
+      }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'AI service temporarily unavailable';
       this.logger.error(`sendMessage failed: ${message}`);
-      res.write(`data: ${JSON.stringify({ type: 'error', message })}\n\n`);
+      try {
+        if (!res.writableEnded) {
+          res.write(`data: ${JSON.stringify({ type: 'error', message })}\n\n`);
+        }
+      } catch {
+        // client already disconnected
+      }
     }
 
-    res.end();
+    if (!res.writableEnded) res.end();
   }
 }
