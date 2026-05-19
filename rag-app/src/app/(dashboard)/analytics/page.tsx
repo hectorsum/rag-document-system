@@ -43,15 +43,15 @@ function StatCard({
   sub?: string;
 }) {
   return (
-    <div className="bg-white rounded-xl border p-5">
+    <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-5">
       <div className="flex items-center justify-between mb-3">
-        <span className="text-sm text-gray-500">{label}</span>
-        <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-          <Icon size={16} className="text-blue-600" />
+        <span className="text-sm text-gray-500 dark:text-gray-400">{label}</span>
+        <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center">
+          <Icon size={16} className="text-blue-600 dark:text-blue-400" />
         </div>
       </div>
-      <p className="text-2xl font-bold text-gray-900">{value}</p>
-      {sub && <p className="text-xs text-gray-400 mt-1">{sub}</p>}
+      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{value}</p>
+      {sub && <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{sub}</p>}
     </div>
   );
 }
@@ -74,8 +74,8 @@ export default function AnalyticsPage() {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold mb-1">Analytics</h1>
-      <p className="text-gray-500 text-sm mb-6">Cost tracking and usage statistics.</p>
+      <h1 className="text-2xl font-bold mb-1 text-gray-900 dark:text-gray-100">Analytics</h1>
+      <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">Cost tracking and usage statistics.</p>
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -106,8 +106,8 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Cost chart */}
-      <div className="bg-white rounded-xl border p-5 mb-6">
-        <h2 className="text-sm font-semibold text-gray-700 mb-4">Cost per Day (last 30 days)</h2>
+      <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-5 mb-6">
+        <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Cost per Day (last 30 days)</h2>
         {chartData.length > 0 ? (
           <ResponsiveContainer width="100%" height={220}>
             <LineChart data={chartData}>
@@ -135,21 +135,21 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Token breakdown */}
-      <div className="bg-white rounded-xl border p-5">
-        <h2 className="text-sm font-semibold text-gray-700 mb-3">Token Usage</h2>
+      <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-5">
+        <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Token Usage</h2>
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
-            <p className="text-gray-500">Input tokens</p>
-            <p className="font-semibold">{(costsData?.totalInputTokens ?? 0).toLocaleString()}</p>
+            <p className="text-gray-500 dark:text-gray-400">Input tokens</p>
+            <p className="font-semibold text-gray-900 dark:text-gray-100">{(costsData?.totalInputTokens ?? 0).toLocaleString()}</p>
           </div>
           <div>
-            <p className="text-gray-500">Output tokens</p>
-            <p className="font-semibold">{(costsData?.totalOutputTokens ?? 0).toLocaleString()}</p>
+            <p className="text-gray-500 dark:text-gray-400">Output tokens</p>
+            <p className="font-semibold text-gray-900 dark:text-gray-100">{(costsData?.totalOutputTokens ?? 0).toLocaleString()}</p>
           </div>
           {costsData?.mostExpensiveQuery && (
-            <div className="col-span-2 border-t pt-3 mt-1">
-              <p className="text-gray-500">Most expensive query</p>
-              <p className="font-semibold">
+            <div className="col-span-2 border-t border-gray-200 dark:border-slate-700 pt-3 mt-1">
+              <p className="text-gray-500 dark:text-gray-400">Most expensive query</p>
+              <p className="font-semibold text-gray-900 dark:text-gray-100">
                 ${costsData.mostExpensiveQuery.cost.toFixed(6)} —{' '}
                 {format(new Date(costsData.mostExpensiveQuery.date), 'MMM d, yyyy HH:mm')}
               </p>

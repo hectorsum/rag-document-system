@@ -70,7 +70,7 @@ export function DocumentList() {
     return (
       <div className="space-y-2">
         {[1, 2, 3].map(i => (
-          <div key={i} className="h-16 bg-gray-100 rounded-xl animate-pulse" />
+          <div key={i} className="h-16 bg-gray-100 dark:bg-slate-800 rounded-xl animate-pulse" />
         ))}
       </div>
     );
@@ -92,7 +92,7 @@ export function DocumentList() {
           <select
             value={filter}
             onChange={e => setFilter(e.target.value as FilterKey)}
-            className="text-xs border rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="text-xs border border-gray-200 dark:border-slate-600 rounded-lg px-2 py-1.5 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">All statuses</option>
             <option value="ready">Ready</option>
@@ -103,7 +103,7 @@ export function DocumentList() {
           <select
             value={sort}
             onChange={e => setSort(e.target.value as SortKey)}
-            className="text-xs border rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="text-xs border border-gray-200 dark:border-slate-600 rounded-lg px-2 py-1.5 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="createdAt">Most recent</option>
             <option value="fileName">Name</option>
@@ -123,12 +123,12 @@ export function DocumentList() {
           {filtered.map((doc: Document) => (
             <li
               key={doc.id}
-              className="flex items-center gap-3 p-4 bg-white rounded-xl border hover:shadow-sm transition-shadow"
+              className="flex items-center gap-3 p-4 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 hover:shadow-sm transition-shadow"
             >
               <FileText size={18} className="text-blue-500 shrink-0" />
 
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate text-gray-800">{doc.fileName}</p>
+                <p className="text-sm font-medium truncate text-gray-800 dark:text-gray-100">{doc.fileName}</p>
                 <p className="text-xs text-gray-400">
                   {formatBytes(doc.fileSize)}
                   {doc.totalChunks != null && ` · ${doc.totalChunks} chunks`}

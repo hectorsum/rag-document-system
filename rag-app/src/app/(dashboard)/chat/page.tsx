@@ -16,8 +16,8 @@ export default function ChatPage() {
   return (
     <div className="flex flex-col items-center justify-center h-full text-center">
       <MessageSquarePlus size={48} className="text-blue-500 mb-4" />
-      <h1 className="text-2xl font-bold mb-2">Chat with your documents</h1>
-      <p className="text-gray-500 text-sm mb-6 max-w-sm">
+      <h1 className="text-2xl font-bold mb-2 text-gray-900 dark:text-gray-100">Chat with your documents</h1>
+      <p className="text-gray-500 dark:text-gray-400 text-sm mb-6 max-w-sm">
         Ask questions about any uploaded PDF. The AI will find relevant passages
         and answer using only your documents.
       </p>

@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { FileText, MessageSquare, BarChart2, LogOut, Brain } from 'lucide-react';
+import { FileText, MessageSquare, BarChart2, LogOut, Brain, Sun, Moon } from 'lucide-react';
 import { authApi, getAnalyticsCosts } from '@/lib/api';
+import { useTheme } from '@/hooks/useTheme';
 
 const navItems = [
   { label: 'Documents', href: '/documents', icon: FileText },
@@ -15,6 +16,7 @@ const navItems = [
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const { dark, toggle } = useTheme();
 
   const { data: user } = useQuery({
     queryKey: ['me'],
@@ -34,10 +36,17 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="w-60 bg-gray-900 text-white flex flex-col shrink-0">
-      <div className="p-5 border-b border-gray-800 flex items-center gap-2">
+    <aside className="w-60 bg-gray-900 dark:bg-slate-950 text-white flex flex-col shrink-0 border-r border-gray-800 dark:border-slate-800">
+      <div className="p-5 border-b border-gray-800 dark:border-slate-800 flex items-center gap-2">
         <Brain size={20} className="text-blue-400" />
-        <span className="font-bold text-sm">RAG Platform</span>
+        <span className="font-bold text-sm tracking-tight">RAG Platform</span>
+        <button
+          onClick={toggle}
+          className="ml-auto text-gray-400 hover:text-gray-200 transition-colors"
+          title={dark ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {dark ? <Sun size={15} /> : <Moon size={15} />}
+        </button>
       </div>
 
       <nav className="flex-1 p-3 space-y-0.5">
@@ -50,13 +59,13 @@ export function Sidebar() {
               className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
                 active
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                  : 'text-gray-400 hover:bg-gray-800 dark:hover:bg-slate-800 hover:text-gray-100'
               }`}
             >
               <Icon size={16} />
               {label}
               {label === 'Analytics' && costs && (
-                <span className="ml-auto text-[10px] bg-gray-700 text-gray-300 px-1.5 py-0.5 rounded-full">
+                <span className="ml-auto text-[10px] bg-gray-700 dark:bg-slate-700 text-gray-300 px-1.5 py-0.5 rounded-full">
                   ${costs.totalSpent.toFixed(4)}
                 </span>
               )}
@@ -65,12 +74,16 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div className="p-3 border-t border-gray-800 space-y-1">
+      <div className="p-3 border-t border-gray-800 dark:border-slate-800 space-y-1">
         {user && (
           <div className="flex items-center gap-2 px-3 py-2">
-            <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold shrink-0">
-              {(user.name ?? user.email)[0].toUpperCase()}
-            </div>
+            {user.email === 'sumhector@gmail.com' ? (
+              <img src="/profile-image.png" alt="Hector" className="w-7 h-7 rounded-full object-cover" />
+            ) : (
+              <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold shrink-0">
+                {(user.name ?? user.email)[0].toUpperCase()}
+              </div>
+            )}
             <div className="min-w-0">
               <p className="text-xs font-medium text-white truncate">{user.name ?? 'User'}</p>
               <p className="text-[10px] text-gray-500 truncate">{user.email}</p>
@@ -79,7 +92,7 @@ export function Sidebar() {
         )}
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 w-full px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white rounded-lg transition-colors"
+          className="flex items-center gap-3 w-full px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 dark:hover:bg-slate-800 hover:text-gray-100 rounded-lg transition-colors"
         >
           <LogOut size={16} />
           Sign out

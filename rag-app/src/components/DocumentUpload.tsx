@@ -91,11 +91,11 @@ export function DocumentUpload({ onSuccess }: Props) {
   const busy = state === 'uploading' || state === 'processing';
 
   const borderClass =
-    isDragging ? 'border-blue-500 bg-blue-50'
-    : busy ? 'border-blue-300 bg-blue-50 cursor-default'
-    : state === 'ready' ? 'border-green-400 bg-green-50'
-    : state === 'error' ? 'border-red-300'
-    : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50';
+    isDragging ? 'border-blue-500 bg-blue-50 dark:bg-blue-950'
+    : busy ? 'border-blue-300 bg-blue-50 dark:bg-blue-950 cursor-default'
+    : state === 'ready' ? 'border-green-400 bg-green-50 dark:bg-green-950'
+    : state === 'error' ? 'border-red-300 dark:border-red-700'
+    : 'border-gray-200 dark:border-slate-600 hover:border-blue-400 hover:bg-gray-50 dark:hover:bg-slate-800';
 
   return (
     <div className="mb-6">
@@ -143,12 +143,12 @@ export function DocumentUpload({ onSuccess }: Props) {
 
         {(state === 'idle' || state === 'error') && (
           <div className="text-center">
-            <Upload size={28} className="mx-auto mb-2 text-gray-400" />
-            <p className="text-sm text-gray-600">
-              <span className="font-medium text-blue-600">Click to upload</span>{' '}
+            <Upload size={28} className="mx-auto mb-2 text-gray-400 dark:text-slate-500" />
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              <span className="font-medium text-blue-600 dark:text-blue-400">Click to upload</span>{' '}
               or drag and drop
             </p>
-            <p className="text-xs text-gray-400 mt-1">PDF files up to 50 MB</p>
+            <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">PDF files up to 50 MB</p>
           </div>
         )}
       </label>

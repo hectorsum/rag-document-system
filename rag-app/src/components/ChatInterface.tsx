@@ -52,7 +52,7 @@ function MessageBubble({ message }: { message: ChatMessage }) {
           className={`rounded-2xl px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap ${
             isUser
               ? 'bg-blue-600 text-white rounded-tr-sm'
-              : 'bg-white border text-gray-800 rounded-tl-sm'
+              : 'bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-800 dark:text-gray-100 rounded-tl-sm'
           }`}
         >
           {message.content}
@@ -144,7 +144,7 @@ export function ChatInterface({ sessionId }: Props) {
                 <button
                   key={s}
                   onClick={() => handleSuggestion(s)}
-                  className="text-left text-sm px-4 py-2.5 bg-white border rounded-xl hover:border-blue-400 hover:text-blue-600 transition-colors"
+                  className="text-left text-sm px-4 py-2.5 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-300 rounded-xl hover:border-blue-400 hover:text-blue-600 transition-colors"
                 >
                   {s}
                 </button>
@@ -159,10 +159,10 @@ export function ChatInterface({ sessionId }: Props) {
 
         {isStreaming && streamingMessage && (
           <div className="flex gap-3 mb-5">
-            <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center shrink-0">
-              <Bot size={14} className="text-gray-600" />
+            <div className="w-7 h-7 rounded-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center shrink-0">
+              <Bot size={14} className="text-gray-600 dark:text-gray-400" />
             </div>
-            <div className="max-w-[75%] bg-white border text-gray-800 rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm leading-relaxed">
+            <div className="max-w-[75%] bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-800 dark:text-gray-100 rounded-2xl rounded-tl-sm px-4 py-2.5 text-sm leading-relaxed">
               <span className="whitespace-pre-wrap">{streamingMessage}</span>
               <span className="inline-block w-1.5 h-4 bg-gray-400 animate-pulse ml-0.5 align-text-bottom" />
             </div>
@@ -171,10 +171,10 @@ export function ChatInterface({ sessionId }: Props) {
 
         {isStreaming && !streamingMessage && (
           <div className="flex gap-3 mb-5">
-            <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center shrink-0">
-              <Bot size={14} className="text-gray-600" />
+            <div className="w-7 h-7 rounded-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center shrink-0">
+              <Bot size={14} className="text-gray-600 dark:text-gray-400" />
             </div>
-            <div className="bg-white border rounded-2xl rounded-tl-sm px-4 py-3">
+            <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl rounded-tl-sm px-4 py-3">
               <Loader2 size={14} className="animate-spin text-gray-400" />
             </div>
           </div>
@@ -184,7 +184,7 @@ export function ChatInterface({ sessionId }: Props) {
       </div>
 
       {/* Input */}
-      <div className="px-4 py-4 border-t bg-white">
+      <div className="px-4 py-4 border-t border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
         <div className="flex gap-2 items-end">
           <textarea
             ref={textareaRef}
@@ -199,7 +199,7 @@ export function ChatInterface({ sessionId }: Props) {
             placeholder="Ask a question… (Enter to send, Shift+Enter for new line)"
             disabled={isStreaming}
             rows={1}
-            className="flex-1 border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 resize-none overflow-hidden"
+            className="flex-1 border border-gray-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-slate-800 placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 resize-none overflow-hidden"
           />
           <button
             onClick={handleSend}
