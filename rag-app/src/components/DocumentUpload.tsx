@@ -62,7 +62,6 @@ export function DocumentUpload({ onSuccess }: Props) {
         const raw = res as any;
         const documentId: string | undefined =
           raw?.data?.documentId ?? raw?.documentId;
-        console.log('[upload] res:', raw, 'documentId:', documentId);
         if (!documentId) throw new Error('Server did not return a documentId');
         pollStatus(documentId);
       } catch (err) {

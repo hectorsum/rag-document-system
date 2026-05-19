@@ -17,6 +17,14 @@ export function useDocuments() {
       const res = await getDocuments();
       return res.data as Document[];
     },
+    // Poll every 3s while any document is still uploading or processing
+    refetchInterval: query => {
+      const docs = query.state.data ?? [];
+      const hasPending = docs.some(
+        d => d.status === 'uploading' || d.status === 'processing',
+      );
+      return hasPending ? 3000 : false;
+    },
   });
 
   const uploadMutation = useMutation({
