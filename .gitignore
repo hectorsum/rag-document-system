@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+.next/
+build/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Uploads
+rag-backend/uploads/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Prisma generated
+# (keep schema, ignore migrations if using db push)
+
+# Test coverage
+coverage/
+
+# TypeScript build info
+*.tsbuildinfo
