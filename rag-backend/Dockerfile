@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Install dependencies (includes dev deps needed for prisma generate + build)
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --include=dev
 
 # Copy source and build
 COPY . .
